@@ -33,7 +33,7 @@ public class HigherWithSameDigits {
 
     private static List<Integer> getDigits(int number) {
         final List<Integer> digits = new ArrayList<>();
-        while(number > 10) {
+        while(number >= 10) {
             digits.add(number % 10);
             number /= 10;
         }
@@ -71,7 +71,7 @@ public class HigherWithSameDigits {
     }
 
     private static boolean testDoubleDigits() {
-        return 6995 = find(6959);
+        return 6995 == find(6959);
     }
 
     public static void main(String[] args) {
