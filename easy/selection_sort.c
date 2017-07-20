@@ -6,8 +6,9 @@
 // E.g. Input array {1, -1, 0} should be sorted as {-1, 0, 1}.
 //
 // Solution: The selection sort algorithm is perhaps the easiest in-place
-// sorting algorithm. It has complexity of n * n/2 = O(n^2), which makes it
-// inefficient for larger input arrays. The primary advantages are its
+// sorting algorithm. It has overall complexity of n * n/2 = O(n^2), which
+// includes n * n/2 comparisons and n swaps. This makes it very inefficient
+// for larger input arrays. Nevertheless, The primary advantages are its
 // simplicity and doing the sorting in-place, thus not requiring significant
 // amount of auxiliary memory.
 
