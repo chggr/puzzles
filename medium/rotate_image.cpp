@@ -38,7 +38,7 @@ void rotate(int* matrix, int n) {
 }
 
 bool are_equal(int* a, int* b, int n) {
-	for (int i = 0; i < n; i++) {
+	for (int i = 0; i < n * n; i++) {
 		if (a[i] != b[i]) return false;
 	}
 	return true;
