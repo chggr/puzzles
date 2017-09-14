@@ -19,8 +19,28 @@ public class StringBuilder {
         for (int i = 0; i < input.length(); i++) {
             array[cursor] = input.charAt(i);
             cursor++;
-         }
-         return this;
+        }
+        return this;
+    }
+
+    public StringBuilder append(final char input) {
+        this.append(Character.toString(input));
+        return this;
+    }
+
+    public StringBuilder append(final int input) {
+        this.append(Integer.toString(input));
+        return this;
+    }
+
+    public StringBuilder append(final long input) {
+        this.append(Long.toString(input));
+        return this;
+    }
+
+    public StringBuilder append(final double input) {
+        this.append(Double.toString(input));
+        return this;
     }
 
     private void resize(final int addCapacity) {
@@ -52,6 +72,17 @@ public class StringBuilder {
         return "Hello world!".equals(builder.toString());
     }
 
+    private static boolean testAppend_VariousTypes() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append("Hello ");
+        builder.append(1);
+        builder.append(' ');
+        builder.append(3.141517);
+        builder.append('-');
+        builder.append(2L);
+        return "Hello 1 3.141517-2".equals(builder.toString());
+    }
+
     private static boolean testAppend_EmptyInput() {
         final StringBuilder builder = new StringBuilder();
         builder.append("");
@@ -74,6 +105,10 @@ public class StringBuilder {
         }
         if (!testToString()) {
             System.out.println("ToString test failed!");
+            counter++;
+        }
+        if (!testAppend_VariousTypes()) {
+            System.out.println("Append test with various types failed!");
             counter++;
         }
         if (!testAppend_EmptyInput()) {
