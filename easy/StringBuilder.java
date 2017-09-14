@@ -27,7 +27,13 @@ public class StringBuilder {
         if ((cursor + addCapacity) <= array.length) {
             return;
         }
-        char[] newArray = new char[array.length * 2];
+
+        int newCapacity = array.length * 2;
+        while (newCapacity < cursor + addCapacity) {
+            newCapacity *= 2;
+        }
+
+        char[] newArray = new char[newCapacity];
         for (int i = 0; i < cursor; i++) {
             newArray[i] = array[i];
         }
@@ -54,6 +60,12 @@ public class StringBuilder {
         return "Hello".equals(builder.toString());
     }
 
+    private static boolean testAppend_LongInput() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append("Lorem ipsum dolor sit amet");
+        return "Lorem ipsum dolor sit amet".equals(builder.toString());
+    }
+
     public static void main(String[] args) {
         int counter = 0;
         if (!testToString_EmptyBuilder()) {
@@ -66,6 +78,10 @@ public class StringBuilder {
         }
         if (!testAppend_EmptyInput()) {
             System.out.println("Append test with empty input failed!");
+            counter++;
+        }
+        if (!testAppend_LongInput()) {
+            System.out.println("Append test with long input failed!");
             counter++;
         }
         System.out.println(counter + " tests failed.");
