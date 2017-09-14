@@ -36,19 +36,19 @@ public class StringCompression {
         return output.length() < input.length() ? output : input;
     }
 
-    public static boolean testCompress() {
+    private static boolean testCompress() {
         return "a3b4c5a1".equals(compress("aaabbbbccccca"));
     }
 
-    public static boolean testCompress_NoCompression() {
+    private static boolean testCompress_NoCompression() {
         return "abcd".equals(compress("abcd"));
     }
 
-    public static boolean testCompress_NullInput() {
+    private static boolean testCompress_NullInput() {
         return null == compress(null);
     }
 
-    public static boolean testCompress_EmptyInput() {
+    private static boolean testCompress_EmptyInput() {
         return "".equals(compress(""));
     }
 
