@@ -1,4 +1,4 @@
-// Task description: Given the head of a signly linked list, implement a method
+// Task description: Given the head of a singly linked list, implement a method
 // to delete the element in the middle of the list. How would you delete a list
 // element if you were given access only to that element and not the head?
 //
