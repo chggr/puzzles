@@ -27,6 +27,12 @@
 // deconstructed by first moving n - 1 disks from tower A to tower B, then
 // moving disk n to tower C and finally moving the n - 1 disks from tower B
 // to tower C.
+//
+// The second implementation below solves the Towers of Hanoi problem
+// iteratively, executing a total of 2^n - 1 number of steps, where n is the
+// total number of disks. In every step, it makes the legal move between two
+// poles, which differ in case n is even or odd. The end result is the same as
+// in the recursive algorithm, but the space complexity stays at O(1).
 
 using namespace std;
 
@@ -62,29 +68,66 @@ void move(stack<int> &a, stack<int> &b, stack<int> &c, int n) {
     move(b, a, c, n - 1);
 }
 
-bool test_one_disk() {
+// Moves the smallest disk of any tower to the other tower.
+void swap(stack<int> &a, stack<int> &b) {
+    if (a.empty() && b.empty()) {
+        throw "Both towers empty, cannot swap disk.";
+    }
+
+    if (a.empty()) {
+        move(b, a);
+    } else if (b.empty()) {
+        move(a, b);
+    } else {
+        if (a.top() > b.top()) {
+            move(b, a);
+        } else {
+            move(a, b);
+        }
+    }
+}
+
+void move_it(stack<int> &a, stack<int> &b, stack<int> &c, int n) {
+    if (n % 2 == 0) {
+        for (int i = 0; i < (1 << n) - 1; i++) {
+            if (i % 3 == 0) swap(a, b);
+            else if (i % 3 == 1) swap(a, c);
+            else swap(b, c);
+        }
+    } else {
+        for (int i = 0; i < (1 << n) - 1; i++) {
+            if (i % 3 == 0) swap(a, c);
+            else if (i % 3 == 1) swap(a, b);
+            else swap(b, c);
+        }
+    }
+}
+
+bool test_one_disk(bool iterative) {
     stack<int> a;
     stack<int> b;
     stack<int> c;
     a.push(1);
 
-    move(a, b, c, 1);
+    if (iterative) move_it(a, b, c, 1);
+    else move(a, b, c, 1);
     return a.empty() && b.empty() && c.size() == 1 && c.top() == 1;
 }
 
-bool test_two_disks() {
+bool test_two_disks(bool iterative) {
     stack<int> a;
     stack<int> b;
     stack<int> c;
     a.push(2);
     a.push(1);
 
-    move(a, b, c, 2);
+    if (iterative) move_it(a, b, c, 2);
+    else move(a, b, c, 2);
     return a.empty() && b.empty() && c.size() == 2 &&
            pop(c) == 1 && pop(c) == 2;
 }
 
-bool test_three_disks() {
+bool test_three_disks(bool iterative) {
     stack<int> a;
     stack<int> b;
     stack<int> c;
@@ -92,12 +135,13 @@ bool test_three_disks() {
     a.push(2);
     a.push(1);
 
-    move(a, b, c, 3);
+    if (iterative) move_it(a, b, c, 3);
+    else move(a, b, c, 3);
     return a.empty() && b.empty() && c.size() == 3 &&
            pop(c) == 1 && pop(c) == 2 && pop(c) == 3;
 }
 
-bool test_five_disks() {
+bool test_five_disks(bool iterative) {
     stack<int> a;
     stack<int> b;
     stack<int> c;
@@ -107,7 +151,8 @@ bool test_five_disks() {
     a.push(2);
     a.push(1);
 
-    move(a, b, c, 5);
+    if (iterative) move_it(a, b, c, 5);
+    else move(a, b, c, 5);
     return a.empty() && b.empty() && c.size() == 5 &&
            pop(c) == 1 && pop(c) == 2 && pop(c) == 3 &&
            pop(c) == 4 && pop(c) == 5;
@@ -115,20 +160,36 @@ bool test_five_disks() {
 
 int main() {
     int counter = 0;
-    if (!test_one_disk()) {
+    if (!test_one_disk(false)) {
         cout << "One disk test failed!" << endl;
         counter++;
     }
-    if (!test_two_disks()) {
+    if (!test_one_disk(true)) {
+        cout << "One disk iterative test failed!" << endl;
+        counter++;
+    }
+    if (!test_two_disks(false)) {
         cout << "Two discs test failed!" << endl;
         counter++;
     }
-    if (!test_three_disks()) {
+    if (!test_two_disks(true)) {
+        cout << "Two discs iterative test failed!" << endl;
+        counter++;
+    }
+    if (!test_three_disks(false)) {
         cout << "Three discs test failed!" << endl;
         counter++;
     }
-    if (!test_five_disks()) {
+    if (!test_three_disks(true)) {
+        cout << "Three discs iterative test failed!" << endl;
+        counter++;
+    }
+    if (!test_five_disks(false)) {
         cout << "Five discs test failed!" << endl;
+        counter++;
+    }
+    if (!test_five_disks(true)) {
+        cout << "Five discs iterative test failed!" << endl;
         counter++;
     }
     cout << counter << " tests failed." << endl;
