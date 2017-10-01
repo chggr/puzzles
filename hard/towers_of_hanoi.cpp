@@ -13,13 +13,13 @@
 // can be represented as a stack of disks.
 //
 //E.g.          Before                                   After
-//        A            B       C              A        B             C
-//        |            |       |              |        |            [|]
-//       [|]           |       |              |        |           [ | ]
-//      [ | ]          |       |              |        |          [  |  ]
-//     [  |  ]         |       |              |        |         [   |   ]
-//    [   |   ]        |       |              |        |        [    |    ]
-//   [    |    ]       |       |              |        |       [     |     ]
+//        A            B       C              A        B            C
+//        |            |       |              |        |            |
+//       [|]           |       |              |        |           [|]
+//      [ | ]          |       |              |        |          [ | ]
+//     [  |  ]         |       |              |        |         [  |  ]
+//    [   |   ]        |       |              |        |        [   |   ]
+//   [    |    ]       |       |              |        |       [    |    ]
 //
 // Solution: The implementation below is a simple recursive solution to the
 // Towers of Hanoi problem. The base case is for n = 1, where only one disk
