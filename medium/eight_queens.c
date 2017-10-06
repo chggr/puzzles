@@ -7,10 +7,13 @@
 // Solution: The implementation below uses an iterative approach to print out
 // all possible chess board configurations with 8 queens. It starts by placing
 // a queen in the first row and then moves on recursively to place queens in
-// the remaining rows as well. This implementation is using an 8x8 matrix to
-// store the state of the chess board, but this can be optimized by storing a
-// single 8 byte array where array[r] = c indicates that row r has queen at
-// column c.
+// the remaining rows as well.
+//
+// The second implementation is an optimization on the first one in two ways:
+// (1) it does not use an 8x8 matrix but rather a one-dimensional 8 element
+// array to store the chess board's state, where array[r] = c indicates that
+// row r has a queen at column c. (2) it does not check whether each row is
+// free, as the algorithm attempts to place a queen at a given row only once.
 
 void print_board(int *board) {
     for (int i = 0; i < 8; i++) {
@@ -68,8 +71,8 @@ int can_place(int *board, int row, int col) {
            is_diag_free(board, row, col);
 }
 
-void place(int* board, int row) {
-    if (row >= 8) {
+void place(int *board, int row) {
+    if (row == 8) {
         print_board(board);
         return;
     }
@@ -79,6 +82,39 @@ void place(int* board, int row) {
             board[row * 8 + i] = 1;
             place(board, row + 1);
             board[row * 8 + i] = 0;
+        }
+    }
+}
+
+int can_place_opt(int *array, int row, int col) {
+    for (int r = 0; r < row; r++) {
+
+        // Check if the column has been used already.
+        int c = array[r];
+        if (col == c) return 0;
+
+        // Check diagonals: if the distance between rows is the same as
+        // distance between columns, then they are in same diagonal.
+        int dist = c - col;
+        dist = dist < 0 ? -dist : dist;
+        if (dist == row - r) return 0;
+    }
+    return 1;
+}
+
+void place_opt(int *array, int row) {
+    if (row == 8) {
+        for (int i = 0; i < 8; i++) {
+            printf("%d ", array[i]);
+        }
+        printf("\n\n");
+        return;
+    }
+
+    for (int col = 0; col < 8; col++) {
+        if (can_place_opt(array, row, col)) {
+            array[row] = col;
+            place_opt(array, row + 1);
         }
     }
 }
@@ -145,7 +181,11 @@ int main() {
         counter++;
     }
     printf("%d tests failed.\n", counter);
+
     int board[64] = {0};
     place(board, 0);
+
+    int array[8] = {0};
+    place_opt(array, 0);
 }
 
