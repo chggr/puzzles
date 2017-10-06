@@ -13,38 +13,36 @@
 // complexity is O(n) when the input array is already sorted.
 
 void sort(int input[], int size) {
-	int sorted = 0;
-	int temp;
+    int sorted = 0;
+    int temp;
 
-	while (!sorted) {
-		sorted = 1;
-		for (int i = 0; i < size - 1; i++) {
-			if (input[i] > input[i + 1]) {
-				sorted = 0;
-				temp = input[i];
-				input[i] = input[i + 1];
-				input[i + 1] = temp;
-			}
-		}
-	}
+    while (!sorted) {
+        sorted = 1;
+        for (int i = 0; i < size - 1; i++) {
+            if (input[i] > input[i + 1]) {
+                sorted = 0;
+                temp = input[i];
+                input[i] = input[i + 1];
+                input[i + 1] = temp;
+            }
+        }
+    }
 }
 
 int is_sorted(int input[], int size) {
-	for (int i = 0; i < size - 1; i++) {
-		if (input[i] > input[i + 1]) return 0;
-	}
-	return 1;
+    for (int i = 0; i < size - 1; i++) {
+        if (input[i] > input[i + 1]) return 0;
+    }
+    return 1;
 }
 
 void main() {
-	int input[] = {0, -1, -2, -1, 10, 3, 8};
-	sort(input, 7);
-	if (!is_sorted(input, 7)) {
-		printf("Input array has not been sorted!\n");
-	} else {
-		printf("Input array is sorted.\n");
-	}
+    int input[] = {0, -1, -2, -1, 10, 3, 8};
+    sort(input, 7);
+    if (!is_sorted(input, 7)) {
+        printf("Input array has not been sorted!\n");
+    } else {
+        printf("Input array is sorted.\n");
+    }
 }
-
-
 
