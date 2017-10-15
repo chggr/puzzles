@@ -14,6 +14,12 @@
 // the middle element that is not an empty string. This element is then used in
 // a standard implementation of binary search to search through the input
 // vector and return the index of the given string.
+//
+// The best runtime complexity of this algorithm is O(logn) in cases where the
+// input vector contains very few empty strings. This degrades to O(n) if the
+// input vector contains mostly or only empty strings. The implementation below
+// does not handle searching for the empty string - the string to search for
+// should not be empty.
 
 using namespace std;
 
