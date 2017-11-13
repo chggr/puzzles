@@ -6,7 +6,7 @@
 // empty strings, write a method to find the location of a given string. The
 // method should return -1 if the string is part of the vector.
 //
-// E.g. For input vector: {"a",·"",·"",·"b",·"",·"c",·"",·"",·"",·"d"}
+// E.g. For input vector: {"a", "", "", "b", "", "c", "", "", "", "d"}
 //      string "c" is at location 5.
 //
 // Solution: The implementation below uses a modified binary search to locate
