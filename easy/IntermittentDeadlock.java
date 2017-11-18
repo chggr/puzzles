@@ -34,7 +34,7 @@ public class IntermittentDeadlock {
     });
 
     private final Thread threadB = new Thread(() -> {
-        System.out.println("Thread B: started.");
+        System.out.println("Thread B: started");
         lockB.lock();
         System.out.println("Thread B: got lock B");
         lockA.lock();
@@ -43,7 +43,7 @@ public class IntermittentDeadlock {
         System.out.println("Thread B: released lock A");
         lockB.unlock();
         System.out.println("Thread B: released lock B");
-        System.out.println("Thread B: finished.");
+        System.out.println("Thread B: finished");
     });
 
     public void deadlock() throws InterruptedException {
