@@ -62,7 +62,6 @@ int test_fully_blocked() {
                   1, 0, 1, 1, 1,
                   1, 0, 1, 1, 1};
     int mem[25] = { 0 };
-    printf("%d", move_mem(5, 5, grid, mem, 0, 0));
     return 0 == move(5, 5, grid, 0, 0) &&
            0 == move_mem(5, 5, grid, mem, 0, 0);
 }
