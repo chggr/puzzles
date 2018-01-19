@@ -28,7 +28,14 @@ import java.util.List;
 //
 // (2) Alternatively we could break the circle by having all philosophers first
 // reach out for the left chopstick and then the right, except from one
-// philosopher that will attempt to take the chopsticks in reverse order.
+// philosopher that will attempt to take the chopsticks in reverse order. This
+// approach would solve the deadlock but would also create unfairness because
+// the latter philosopher will be highly more likely to execute first at the
+// expense of all the other philosophers that will be waiting. To eliminate
+// unfairness, we could have all even-numbered philosophers use one order and
+// all odd-numbered philosophers use the reverse. This approach would be totally
+// fair when the total number of philosophers is even and slightly unfair if the
+// total number of philosophers is odd, but still much better than before.
 
 public class DiningPhilosophers {
 
