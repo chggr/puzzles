@@ -2,7 +2,7 @@
 
 // Task description: Given a real number between 0 and 1 (e.g. 0.245), write a
 // method to print its binary representation to the standard output. The method
-// should print an error if the number cannot be represented accurtely in
+// should print an error if the number cannot be represented accurately in
 // binary with at most 32 bits.
 //
 // E.g. For input 0.125, the method should print "0.001"
