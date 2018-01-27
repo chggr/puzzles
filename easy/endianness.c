@@ -11,15 +11,18 @@
 // significant byte is stored in the lowest address. The example below shows how
 // an integer equal to one would be stored using the two formats.
 //
-//                   BYTE_1       BYTE_2       BYTE_3       BYTE_4_
+//                   BYTE_1       BYTE_2       BYTE_3       BYTE_4
 // Little-endian:   00000001     00000000     00000000     00000000
 // Big-endian:      00000000     00000000     00000000     00000001
 //
 // The Java Virtual Machine is big-endian regardless of the underlying processor
 // type. Therefore the function to determine endianness needs to be written in
-// C. The function below first allocates an integer (four bytes) and sets its
-// value to one. It then tests whether the first byte stored is zero or one to
-// find out whether the computer is big or little endian.
+// C. The first function below initially allocates an integer (four bytes) and
+// sets its value to one. It then tests whether the first byte stored is zero or
+// one to find out whether the computer is big or little endian. The second
+// function works in a similar way but uses a union to store both an integer and
+// a character in the same memory location. It then sets the integer to one and
+// uses the character to read the first byte.
 
 int little_endian() {
     int num = 1;
