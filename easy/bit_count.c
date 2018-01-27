@@ -26,6 +26,11 @@
 //         0000010       0000001        0000000
 //         0000011       0000010        0000010
 //         0011000       0010111        0010000
+//
+// Negative numbers are represented in two's complement which can be derived
+// from the binary representation of the positive number by negating all bits
+// and then adding one. Therefore when a 32-bit signed integer takes value -1,
+// all its 32 bits are set to 1.
 
 int bit_count(int num) {
     int result = 0;
