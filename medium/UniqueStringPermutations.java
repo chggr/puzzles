@@ -17,6 +17,25 @@ import java.util.List;
 // called in total n times and its own complexity is O(n). Method combine() is
 // called for each permutation and therefore the total runtime complexity is
 // O(n! * n^2).
+//
+// The second implementation uses a different approach to arrive at the same
+// result. It works by splitting the input string in a prefix and a suffix. In
+// each recursive call we first check whether the suffix is empty. If that is
+// the case, then the prefix contains a permutation that can be added to the
+// results. We then iterate through all characters of the suffix, remove the
+// current character from the suffix, append it to the prefix and call the
+// same method recursively.
+//
+// The second approach also has runtime complexity of O(n! * n^2) because method
+// getPermutations() is called in total n * n! times. It is called n times until
+// it reaches the base case to identify a permutation and there are in total n!
+// permutations. The runtime complexity of each of those calls is O(n) and thus
+// the complexity overall is O(n! * n^2).
+//
+// Note that both implementations cannot handle input strings that contain
+// duplicate characters. In such cases they will produce a list of permutations
+// that will contain duplicates. For example, if the input string is "aaa", the
+// output will be a list with six elements, all equal to "aaa".
 
 public class UniqueStringPermutations {
 
@@ -49,6 +68,30 @@ public class UniqueStringPermutations {
             results.add(start + c + end);
         }
         return results;
+    }
+
+    private static List<String> permutations2(String input) {
+        List<String> results = new ArrayList<>();
+        if (input == null || input.isEmpty()) {
+            return results;
+        }
+        getPermutations("", input, results);
+        return results;
+    }
+
+    private static void getPermutations(String prefix, String suffix,
+                                        List<String> results) {
+
+        if (suffix.isEmpty()) {
+            results.add(prefix);
+            return;
+        }
+
+        for (int i = 0; i < suffix.length(); i++) {
+            String newSuffix = suffix.substring(0, i) +
+                               suffix.substring(i + 1);
+            getPermutations(prefix + suffix.charAt(i), newSuffix, results);
+        }
     }
 
     private static boolean testNullString() {
@@ -85,6 +128,39 @@ public class UniqueStringPermutations {
                output.contains("cba");
     }
 
+    private static boolean testDuplicates() {
+        final List<String> output = permutations("aab");
+        return output.size() == 6 &&
+               output.contains("aab") &&
+               output.contains("aba") &&
+               output.contains("baa");
+    }
+
+    private static boolean testAllDuplicates() {
+        final List<String> output = permutations("aaa");
+        return output.size() == 6 &&
+               output.contains("aaa");
+    }
+
+    private static boolean areEqual(List<String> a, List<String> b) {
+        if (a == b) return true;
+        if (a.size() != b.size()) return false;
+        for (int i = 0; i < a.size(); i++) {
+            if (!b.contains(a.get(i))) return false;
+        }
+        return true;
+    }
+
+    private static boolean testPermutations2() {
+        return areEqual(permutations(null), permutations2(null)) &&
+               areEqual(permutations(""), permutations2("")) &&
+               areEqual(permutations("a"), permutations2("a")) &&
+               areEqual(permutations("ab"), permutations2("ab")) &&
+               areEqual(permutations("abc"), permutations2("abc")) &&
+               areEqual(permutations("aab"), permutations2("aab")) &&
+               areEqual(permutations("aaa"), permutations2("aaa"));
+    }
+
     public static void main(String[] args) {
         int counter = 0;
         if (!testNullString()) {
@@ -105,6 +181,18 @@ public class UniqueStringPermutations {
         }
         if (!testThreeCharacters()) {
             System.out.println("Three characters string test failed!");
+            counter++;
+        }
+        if (!testDuplicates()) {
+            System.out.println("Duplicate characters test failed!");
+            counter++;
+        }
+        if (!testAllDuplicates()) {
+            System.out.println("All duplicate characters test failed!");
+            counter++;
+        }
+        if (!testPermutations2()) {
+            System.out.println("Permutations 2 test failed!");
             counter++;
         }
         System.out.println(counter + " tests failed.");
