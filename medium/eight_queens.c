@@ -4,7 +4,7 @@
 // possible ways of arranging eight queens so that none of them share the
 // same row, column or diagonal.
 //
-// Solution: The implementation below uses an iterative approach to print out
+// Solution: The implementation below uses a recursive approach to print out
 // all possible chess board configurations with 8 queens. It starts by placing
 // a queen in the first row and then moves on recursively to place queens in
 // the remaining rows as well.
