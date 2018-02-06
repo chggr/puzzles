@@ -11,6 +11,14 @@ import java.util.List;
 //      For input -10 the answer is 0
 //      For input 0 the answer is 0
 //      For input 98765 the answer is 98765
+//
+// Solution: The implementation below uses a simple brute force approach to
+// solve this task. It first extracts the digits of the given number and then
+// iteratively examines all numbers higher than that to identify a match. The
+// runtime complexity of this approach is O(n * 10^n), where n is the number of
+// digits in the given integer. The algorithm potentially examines 10^n
+// candidates and for each one extracts and compares its digits.
+
 public class HigherWithSameDigits {
 
     private static int find(int number) {
