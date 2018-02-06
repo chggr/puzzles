@@ -13,6 +13,9 @@
 // the side which the element we are searching for will be in. Instead of
 // recursing on both sides like quicksort, quickselect only operates on one
 // side, reducing the runtime complexity from O(n logn) to just O(n) on average.
+// At the beginning it goes through n elements, then n/2, then n/4 and so on.
+// The sum n + n/2 + n/4 + n/8 + ... asymptotically converges to 2n, giving an
+// overall runtime complexity of O(n).
 //
 // Quickselect is in-place and beyond selecting the kth element also partially
 // sorts the data. Unfortunately it is sensitive to the pivot chosen. In order
