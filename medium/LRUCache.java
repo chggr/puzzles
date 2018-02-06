@@ -25,7 +25,7 @@ import java.util.Map;
 // The implementation below uses both approaches and to achieve O(1) runtime
 // complexity both when retrieving an element and when removing the least
 // recently used element. The underlying data structure is a HashMap, whose
-// elements are also par of a doubly linked list. The map guarantees fast
+// elements are also part of a doubly linked list. The map guarantees fast
 // access to each key-value pair and the list guarantees fast access to the
 // least recently used element.
 
