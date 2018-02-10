@@ -26,11 +26,11 @@ int function_a(int n) {
 }
 
 int function_b(int n) {
-	return n <= 0 ? 1 : function_a(n - 2) + 1;
+	return n <= 0 ? 1 : function_b(n - 2) + 1;
 }
 
 int function_c(int n) {
-	return n <= 0 ? 1 : function_a(n / 3) + 1;
+	return n <= 0 ? 1 : function_c(n / 3) + 1;
 }
 
 int function_d(int n, int o, int p) {
