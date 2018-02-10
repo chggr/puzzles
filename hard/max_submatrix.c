@@ -35,6 +35,17 @@
 //     |                     |
 //     |_____________________|
 //
+// The third implementation is the most optimal, with runtime complexity of
+// O(N^3) and space complexity O(N). In more detail, if R is the number of rows
+// and C is the number of columns, the runtime complexity of this algorithm is
+// O(R^2 * C) and the space complexity O(C). It leverages a well known algorithm
+// that retrieves the maximum sum of a one dimensional sub-array in O(N). Every
+// sub-array can be represented as a contiguous sequence of rows and columns. If
+// we iterate through every contiguous sequence of rows, we would then just need
+// to find for each of those the set of columns that gives the highest sum. A
+// double for loop is used to go through all contiguous sequences of rows. For
+// each one we calculate the sum of columns and use the aforementioned algorithm
+// to find the maximum sum.
 
 // Calculates the sum of all elements in a sub-array.
 int sub_sum_brute(int array[], int width, int height,
@@ -134,6 +145,41 @@ int max_subarray_better(int array[], int width, int height) {
     return max;
 }
 
+// Returns the sum of the maximum sub-array in the given array.
+int max_subarray(int array[], int size) {
+    int max = 0;
+    int current = 0;
+    for (int i = 0; i < size; i++) {
+        current += array[i];
+        if (current > max) max = current;
+        if (current <= 0) current = 0;
+    }
+    return max;
+}
+
+// Calculates the sub-array with the largest sum in the given array.
+int max_subarray_optimal(int array[], int width, int height) {
+    int max = 0;
+    int current = 0;
+
+    for (int row = 0; row < height; row++) {
+        int column_sums[width];
+        for (int i = 0; i < width; i++) {
+            column_sums[i] = 0;
+        }
+
+        for (int r = row; r < height; r++) {
+            for (int c = 0; c < width; c++) {
+                column_sums[c] += array[r * width + c];
+            }
+
+            current = max_subarray(column_sums, width);
+            if (current > max) max = current;
+        }
+    }
+    return max;
+}
+
 int zeros[] = {0, 0, 0, 0, 0,
                0, 0, 0, 0, 0,
                0, 0, 0, 0, 0,
@@ -202,14 +248,21 @@ int test_sub_sum_better() {
            0 == sub_sum_better(ones, areas_ones, 5, 5, 1, 1, 0, 0);
 }
 
+int test_max_subarray() {
+    int array[] = {1, 2, -4, 3, 1, -2, -1};
+    return 4 == max_subarray(array, 7);
+}
+
 int test_all_zero() {
     return 0 == max_subarray_brute(zeros, 5, 5) &&
-           0 == max_subarray_better(zeros, 5, 5);
+           0 == max_subarray_better(zeros, 5, 5) &&
+           0 == max_subarray_optimal(zeros, 5, 5);
 }
 
 int test_all_one() {
     return 25 == max_subarray_brute(ones, 5, 5) &&
-           25 == max_subarray_better(ones, 5, 5);
+           25 == max_subarray_better(ones, 5, 5) &&
+           25 == max_subarray_optimal(ones, 5, 5);
 }
 
 int test_negative() {
@@ -220,7 +273,8 @@ int test_negative() {
                    -12, 17,  5, 12, -25};
 
     return 112 == max_subarray_brute(array, 5, 5) &&
-           112 == max_subarray_better(array, 5, 5);;
+           112 == max_subarray_better(array, 5, 5) &&
+           112 == max_subarray_optimal(array, 5, 5);
 }
 
 int main() {
@@ -235,6 +289,10 @@ int main() {
     }
     if (!test_sub_sum_better()) {
         printf("Sub-array sum better test failed!\n");
+        counter++;
+    }
+    if (!test_max_subarray()) {
+        printf("Max sub-array test failed!\n");
         counter++;
     }
     if (!test_all_zero()) {
