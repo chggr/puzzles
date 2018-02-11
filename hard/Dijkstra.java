@@ -23,6 +23,23 @@ import java.util.Queue;
 // this algorithm is O(V * logV + E * logV). It takes O(logN) time to pop() or
 // push() in the min-heap PriorityQueue. We need to do V pops and E pushes into
 // the min-heap.
+//
+// A related algorithm that can also be used to find the optimal path towards a
+// given target in a graph is A*. A* is an informed search or best-first search
+// algorithm, meaning that it solves the path-finding problem by searching among
+// all possible paths to the target and considers the ones that (1) incur the
+// smallest cost and (2) appear to lead more quickly to the target. It creates
+// a tree of paths with the starting node as root and iteratively expands the
+// most promising path until the target node is reached. At each iteration, A*
+// needs to determine which of the partial paths should be expanded. It does so
+// by minimizing the cost function f(n) = g(n) + h(n), where n is the last node
+// in each path, g(n) is the cost of the path from start to n and h(n) is a
+// heuristic that estimates the cost to reach the target node from n. For the
+// algorithm to find the shortest path, h(n) must be admissible, i.e. it should
+// never overestimate the actual cost to reach the target. Dijkstra's algorithm
+// is a special case of A* where no heuristic function is used (i.e. h(n) = 0).
+// For example, when searching for the shortest route on a map, h(n) could be
+// the straight-line distance to the goal.
 
 public class Dijkstra {
 
