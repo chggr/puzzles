@@ -23,9 +23,9 @@ import java.util.Stack;
 //
 // The implementation below uses a brute force approach to solve the problem by
 // trying all possibilities. It uses a recursive algorithm that keeps track of
-// nodes that have been visited and the distance up to now, updating the the
-// minimum distance and best bath accordingly. It contains an optimization to
-// stop travelling down a path if the distance has already exceeded the minimum
+// nodes that have been visited and the distance up to now, updating the minimum
+// distance and best bath accordingly. It contains an optimization to stop
+// travelling down a path if the distance has already exceeded the minimum
 // distance found previously. Nevertheless the runtime complexity of this
 // approach is O(N!).
 
