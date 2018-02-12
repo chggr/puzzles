@@ -11,7 +11,7 @@
 //                                              212 122 311 131 113 32 23
 //
 // Solution: The first implementation below is a simple recursive approach.
-// This approach is not very efficient and its runtime complexity is O(n^3),
+// This approach is not very efficient and its runtime complexity is O(3^n),
 // because each recursive call branches out to three more calls.
 //
 // The second implementation uses memoization to store intermediate results
