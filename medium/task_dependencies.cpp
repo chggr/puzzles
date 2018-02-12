@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-// Task description: Given a list of tasks and the dependencies betwen them,
+// Task description: Given a list of tasks and the dependencies between them,
 // design a graph to hold this information and an algorithm to identify the
 // correct order in which the tasks need to be executed. Throw an exception if
 // the dependencies between the tasks are such that there is no way to complete
