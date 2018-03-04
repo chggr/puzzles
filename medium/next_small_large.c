@@ -9,7 +9,7 @@
 //      for number 25 (0b11001) the answers are 22 (0b10110) and 26 (0b11010).
 //
 // Solution: In order to find the next largest number, we need to identify the
-// first occurence of bit sequence "01" and count the number of trailing zeros
+// first occurrence of bit sequence "01" and count the number of trailing zeros
 // and ones leading to this sequence. Once "01" is identified, we flip the
 // leading zero to 1 and set all the bits after it to zero. The new number
 // should have the same count of 1 bits as the old number, thus we still need
