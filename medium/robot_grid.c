@@ -18,8 +18,17 @@
 // performance significantly. When a position in the grid is first visited and
 // evaluated, the result is stored in a secondary matrix so that the recursive
 // algorithm does not need to re-evaluate the same position when it visits it
-// again. The improved runtime complexity is O(XY), as each position is now
+// again. The improved runtime complexity is O(r * c), as each position is now
 // evaluated only once.
+//
+// Finally, the third implementation uses an iterative dynamic programming
+// approach to avoid recursive calls and further reduce space complexity to O(1)
+// while retaining runtime complexity of O(r * c). Both previous implementations
+// were top-down, whereas this one is bottom up. It iterates through the grid
+// from bottom right to top left and at each position calculates the number of
+// steps required to reach the destination. This can be computed as the minimum
+// value of the two cells at right and down. Finally the origin will contain the
+// minimum number of steps to reach the destination.
 
 int move(int r, int c, int *grid, int x, int y) {
     if (x >= c || y >= r || !grid[y * c + x]) return 0;
@@ -44,6 +53,40 @@ int move_mem(int r, int c, int *grid, int *mem, int x, int y) {
     return 0;
 }
 
+int move_dyn(int r, int c, int *grid) {
+
+    for (int row = r - 1; row >= 0; row--) {
+        for (int col = c - 1; col >= 0; col--) {
+
+            // Do not calculate at blocks or at the destination.
+            if (grid[row * c + col] == 0) continue;
+            if (row == r - 1 && col == c - 1) continue;
+
+            int down = row < r - 1 ? grid[(row + 1) * c + col] : 0;
+            int right = col < c - 1 ? grid[row * c + col + 1] : 0;
+
+            // No path to destination.
+            if (down == 0 && right == 0) {
+                grid[row * c + col] = 0;
+                continue;
+            }
+
+            if (down > 0 && right > 0) {
+                grid[row * c + col] = down < right ? down : right;
+            } else if (down > 0) {
+                grid[row * c + col] = down;
+            } else {
+                grid[row * c + col] = right;
+            }
+            grid[row * c + col]++;
+        }
+    }
+
+    // If there is a valid path to the destination, grid[0] will
+    // contain the minimum number of steps to reach the destination.
+    return grid[0] > 0;
+}
+
 int test_no_blocks() {
     int grid[] = {1, 1, 1, 1, 1,
                   1, 1, 1, 1, 1,
@@ -52,7 +95,8 @@ int test_no_blocks() {
                   1, 1, 1, 1, 1};
     int mem[25] = { 0 };
     return 1 == move(5, 5, grid, 0, 0) &&
-           1 == move_mem(5, 5, grid, mem, 0, 0);
+           1 == move_mem(5, 5, grid, mem, 0, 0) &&
+           1 == move_dyn(5, 5, grid);
 }
 
 int test_fully_blocked() {
@@ -63,7 +107,8 @@ int test_fully_blocked() {
                   1, 0, 1, 1, 1};
     int mem[25] = { 0 };
     return 0 == move(5, 5, grid, 0, 0) &&
-           0 == move_mem(5, 5, grid, mem, 0, 0);
+           0 == move_mem(5, 5, grid, mem, 0, 0) &&
+           0 == move_dyn(5, 5, grid);
 }
 
 int test_partially_blocked() {
@@ -74,7 +119,8 @@ int test_partially_blocked() {
                   1, 0, 1, 1, 1};
     int mem[25] = { 0 };
     return 1 == move(5, 5, grid, 0, 0) &&
-           1 == move_mem(5, 5, grid, mem, 0, 0);
+           1 == move_mem(5, 5, grid, mem, 0, 0) &&
+           1 == move_dyn(5, 5, grid);
 }
 
 int test_destination_blocked() {
@@ -85,7 +131,8 @@ int test_destination_blocked() {
                   1, 1, 1, 1, 0};
     int mem[25] = { 0 };
     return 0 == move(5, 5, grid, 0, 0) &&
-           0 == move_mem(5, 5, grid, mem, 0, 0);
+           0 == move_mem(5, 5, grid, mem, 0, 0) &&
+           0 == move_dyn(5, 5, grid);
 }
 
 int main() {
