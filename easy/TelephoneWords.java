@@ -34,6 +34,17 @@ import java.util.Map;
 // allocating memory unnecessarily. In that case we could simply define a fixed
 // character array and each iteration would change the letter at its
 // corresponding position.
+//
+// A small variation to this problem is when a dictionary is also provided and
+// the question is to find a list of words in the dictionary that match a given
+// number. This can be done in a similar way as before, with runtime complexity
+// of O(3^n) where n is the number of digits. Performance can be significantly
+// improved by pre-processing the dictionary and transforming it into a Trie.
+// This will allow us to stop recursing as soon as we reach a prefix that does
+// not exist in the Trie. Finally, another optimized approach would be to pre
+// process all words in the dictionary and transform them into numbers. This
+// step would take O(D * W) where D is the dictionary size and W the average
+// length of a word, but subsequent lookups would only take O(1).
 
 public class TelephoneWords {
 
