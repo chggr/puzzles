@@ -20,13 +20,14 @@ import java.util.Map;
 // recursive stack.
 //
 // Another approach would be to first sort all people based on one parameter,
-// e.g. weight, and thus reduce the problem in just one dimension: finding the
+// e.g. weight, and thus reduce the problem to just one dimension: finding the
 // longest increasing subsequence by height. This can be done iteratively by
 // using a list of stacks. We iterate through the weight-sorted list of people
-// and for every person we find the longest suitable stack to push them on. If
-// no such stack exists, a new stack with only that person is created. Finally
-// we return the height of the tallest stack. The runtime complexity of this
-// approach is again O(n^2) and space complexity also O(n).
+// and for every person we find the longest suitable stack that they can be
+// appended to. Thus for every person we store a stack with the longest tower
+// that ends with that person on top. Then it is a matter of iterating through
+// all stacks to find the tallest one. The runtime complexity of this approach
+// is again O(n^2) and space complexity also O(n).
 
 public class Circus {
 
