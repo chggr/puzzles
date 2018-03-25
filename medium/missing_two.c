@@ -83,6 +83,16 @@ struct pair find_two(int array[], int n) {
     int p = factorial(n) / multiply(array, n);
 
     struct pair result;
+    result.first = 0;
+    result.second = 0;
+
+    // Handle cases where none or just one is missing.
+    if (s == 0 && p == 1) return result;
+    if (s == p) {
+        result.first = s;
+        return result;
+    }
+
     result.first = (s + sqrt(s * s - 4.0 * p)) / 2;
     result.second = s - result.first;
     return result;
@@ -90,12 +100,20 @@ struct pair find_two(int array[], int n) {
 
 int test_none_missing() {
     int array[] = {9, 4, 1, 7, 3, 2, 8, 6, 5};
-    return 0 == find_one(array, 9);
+
+    int one = find_one(array, 9);
+    struct pair two = find_two(array, 9);
+
+    return 0 == one && 0 == two.first && 0 == two.second;
 }
 
 int test_one_missing() {
     int array[] = {9, 4, 1, 7, 3, 0, 8, 6, 5};
-    return 2 == find_one(array, 9);
+
+    int one = find_one(array, 9);
+    struct pair two = find_two(array, 9);
+
+    return 2 == one && 2 == two.first && 0 == two.second;
 }
 
 int test_two_missing() {
