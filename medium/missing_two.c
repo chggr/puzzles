@@ -40,6 +40,15 @@
 // In both cases, if the input array is large the sum / product of the elements
 // might overflow the int value used below. In such cases we should use a larger
 // data type such as 'unsigned long long' in C / C++ or BigInteger in Java.
+//
+// Another way to find any number of missing integers in a sequence from 1 to N
+// is by going through the sequence and multiply the result for each value x
+// with the xth prime number. For example if the value is 5, we would need to
+// multiply the result by 11. In order to find the missing integers, we then
+// iterate through all prime numbers and divide the result by each one. If the
+// modulo is not zero, then the position of that prime number is missing from
+// the initial sequence. The runtime complexity of this approach is O(n),
+// provided that there is already a lookup table of primes available.
 
 // Sums all elements in the array.
 int sum(int array[], int size) {
@@ -98,13 +107,43 @@ struct pair find_two(int array[], int n) {
     return result;
 }
 
+int primes[] = {1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37};
+
+struct pair find_two_prime(int array[], int n) {
+    int p = 1;
+    for (int i = 0; i < n; i++) {
+        p *= primes[array[i]];
+    }
+
+    struct pair result;
+    result.first = 0;
+    result.second = 0;
+
+    for (int i = 0; i < n; i++) {
+        if (p % primes[i] == 0) {
+            p /= primes[i];
+            continue;
+        }
+
+        if (result.first == 0) {
+            result.first = i;
+            continue;
+        }
+        result.second = i;
+        break;
+    }
+    return result;
+}
+
 int test_none_missing() {
     int array[] = {9, 4, 1, 7, 3, 2, 8, 6, 5};
 
     int one = find_one(array, 9);
     struct pair two = find_two(array, 9);
+    struct pair two_prime = find_two_prime(array, 9);
 
-    return 0 == one && 0 == two.first && 0 == two.second;
+    return 0 == one && 0 == two.first && 0 == two.second &&
+           0 == two_prime.first && 0 == two_prime.second;
 }
 
 int test_one_missing() {
@@ -112,14 +151,20 @@ int test_one_missing() {
 
     int one = find_one(array, 9);
     struct pair two = find_two(array, 9);
+    struct pair two_prime = find_two_prime(array, 9);
 
-    return 2 == one && 2 == two.first && 0 == two.second;
+    return 2 == one && 2 == two.first && 0 == two.second &&
+           2 == two_prime.first && 0 == two_prime.second;
 }
 
 int test_two_missing() {
     int array[] = {9, 4, 1, 0, 3, 0, 8, 6, 5};
-    struct pair result = find_two(array, 9);
-    return 7 == result.first && 2 == result.second;
+
+    struct pair two = find_two(array, 9);
+    struct pair two_prime = find_two_prime(array, 9);
+
+    return 7 == two.first && 2 == two.second &&
+           2 == two_prime.first && 7 == two_prime.second;
 }
 
 int main() {
