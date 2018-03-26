@@ -107,10 +107,10 @@ public class WordTransformer {
     }
 
     // Uses depth first search to transform one word to another.
-    private static List<String> transform_dft(Set<String> dict,
-                                              Set<String> visited,
-                                              List<String> path,
-                                              String target) {
+    private static List<String> transformDFS(Set<String> dict,
+                                             Set<String> visited,
+                                             List<String> path,
+                                             String target) {
 
         if (path == null || path.isEmpty()) return new ArrayList<>();
 
@@ -124,7 +124,7 @@ public class WordTransformer {
             visited.add(word);
             path.add(word);
 
-            List<String> result = transform_dft(dict, visited, path, target);
+            List<String> result = transformDFS(dict, visited, path, target);
             if (!result.isEmpty()) return result;
 
             path.remove(word);
@@ -133,11 +133,11 @@ public class WordTransformer {
         return new ArrayList<>();
     }
 
-    private static List<String> transform_dft(Set<String> dict, String a, String b) {
+    private static List<String> transformDFS(Set<String> dict, String a, String b) {
         Set<String> visited = new HashSet<>();
         List<String> path = new ArrayList<>();
         path.add(a);
-        return transform_dft(dict, visited, path, b);
+        return transformDFS(dict, visited, path, b);
     }
 
     // Class to hold graph path information, much like a linked list.
@@ -162,7 +162,7 @@ public class WordTransformer {
     }
 
     // Uses one way depth first search to transform one word to another.
-    private static List<String> transform_bft(Set<String> dict, String a, String b) {
+    private static List<String> transformBFS(Set<String> dict, String a, String b) {
         Map<String, List<String>> newDict = preprocess(dict);
 
         Queue<PathNode> queue = new LinkedList<>();
@@ -188,26 +188,93 @@ public class WordTransformer {
         return new ArrayList<>();
     }
 
-    private static boolean testDictionaryEmpty() {
-        List<String> dft = transform_dft(new HashSet<>(), "DAMP", "LIKE");
-        List<String> bft = transform_bft(new HashSet<>(), "DAMP", "LIKE");
+    // Collapses a left and right path of a double BFS into a list of words.
+    private static List<String> collapse(PathNode left, PathNode right) {
+        List<String> result = collapse(left);
+        while (right != null) {
+            result.add(right.word);
+            right = right.previous;
+        }
+        return result;
+    }
 
-        return bft.isEmpty() && dft.isEmpty();
+    private static List<String> transformBFS2(Set<String> dict,
+                                              String a, String b) {
+
+        Map<String, List<String>> newDict = preprocess(dict);
+
+        PathNode aNode = new PathNode(a, null);
+        Queue<PathNode> fromQ = new LinkedList<>();
+        fromQ.add(aNode);
+        Map<String, PathNode> fromVisited = new HashMap<>();
+        fromVisited.put(a, aNode);
+
+        PathNode bNode = new PathNode(b, null);
+        Queue<PathNode> toQ = new LinkedList<>();
+        toQ.add(bNode);
+        Map<String, PathNode> toVisited = new HashMap<>();
+        toVisited.put(b, bNode);
+
+        while(!fromQ.isEmpty() || !toQ.isEmpty()) {
+
+            if (!fromQ.isEmpty()) {
+                PathNode current = fromQ.remove();
+                Set<String> words = getWords(newDict, current.word);
+                for (String word : words) {
+                    if (fromVisited.keySet().contains(word)) continue;
+                    if (toVisited.keySet().contains(word)) {
+                        return collapse(current, toVisited.get(word));
+                    }
+
+                    PathNode next = new PathNode(word, current);
+                    fromVisited.put(word, next);
+                    fromQ.add(next);
+                }
+            }
+
+            if (!toQ.isEmpty()) {
+                PathNode current = toQ.remove();
+                Set<String> words = getWords(newDict, current.word);
+                for (String word : words) {
+                    if (toVisited.keySet().contains(word)) continue;
+                    if (fromVisited.keySet().contains(word)) {
+                        return collapse(fromVisited.get(word), current);
+                    }
+
+                    PathNode next = new PathNode(word, current);
+                    toVisited.put(word, next);
+                    toQ.add(next);
+                }
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    private static boolean testDictionaryEmpty() {
+        List<String> dfs = transformDFS(new HashSet<>(), "DAMP", "LIKE");
+        List<String> bfs = transformBFS(new HashSet<>(), "DAMP", "LIKE");
+        List<String> bfs2 = transformBFS2(new HashSet<>(), "DAMP", "LIKE");
+
+        return dfs.isEmpty() && bfs.isEmpty() && bfs2.isEmpty();
     }
 
     private static boolean testTransformNotExists() {
-        List<String> dft = transform_dft(DICT, "MORE", "LESS");
-        List<String> bft = transform_bft(DICT, "MORE", "LESS");
+        List<String> dfs = transformDFS(DICT, "MORE", "LESS");
+        List<String> bfs = transformBFS(DICT, "MORE", "LESS");
+        List<String> bfs2 = transformBFS(DICT, "MORE", "LESS");
 
-        return bft.isEmpty() && dft.isEmpty();
+        return dfs.isEmpty() && bfs.isEmpty() && bfs2.isEmpty();
     }
 
     private static boolean testTransformExists() {
-        List<String> dft = transform_dft(DICT, "DAMP", "LIKE");
-        List<String> bft = transform_bft(DICT, "DAMP", "LIKE");
+        List<String> dfs = transformDFS(DICT, "DAMP", "LIKE");
+        List<String> bfs = transformBFS(DICT, "DAMP", "LIKE");
+        List<String> bfs2 = transformBFS2(DICT, "DAMP", "LIKE");
         List<String> expected = Arrays.asList("DAMP", "LAMP", "LIMP", "LIME", "LIKE");
 
-        return bft.equals(expected) && dft.equals(expected);
+        return dfs.equals(expected) &&
+               bfs.equals(expected) &&
+               bfs2.equals(expected);
     }
 
     public static void main(String[] args) {
