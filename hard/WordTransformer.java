@@ -44,6 +44,15 @@ import java.util.Set;
 // two nodes are quite close, depth first search might take a very long, windy
 // path to find a connection, whereas depth first search will identify it much
 // faster in practice. The runtime complexity of this approach is also O(V + E).
+//
+// Finally the third implementation is a double breadth first search because it
+// searches from the source and destination nodes simultaneously. The shortest
+// path between the two nodes is identified as soon as the two searches collide.
+// The runtime complexity of a single BFS can also be described as O(B^D)),
+// where B is the branching factor of the graph (i.e. the average number of out
+// edges of each node) and D is the distance between the start and end nodes. In
+// case of double BFS the runtime complexity is O(B ^ (D / 2)), i.e. the square
+// root of a single BFS.
 
 public class WordTransformer {
 
