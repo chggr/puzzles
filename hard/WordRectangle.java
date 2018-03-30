@@ -14,6 +14,13 @@ import java.util.stream.Stream;
 // row and every column forms a word. All rows must be the same length and all
 // columns must be the same height.
 //
+// E.g. A N T I C S
+//      N O R M A N
+//      G R I P P E
+//      I M P A L E
+//      N A P I E R
+//      A L E R T S
+//
 // Solution: In the implementation below, we first pre-process the dictionary
 // and transform it into a map that groups together all words with the same
 // length. For each one of these groups we create a Trie, which contains all
@@ -106,18 +113,21 @@ public class WordRectangle {
     }
 
     // Validates that the columns in the rectangle either are valid prefixes or
-    // form words that exist in the trie.
+    // form words that exist in the trie and have not been used before.
     private boolean validateColumns(String[] rect,
                                     int height,
                                     int width,
                                     TrieNode root,
-                                    boolean fullWords) {
+                                    boolean fullWords,
+                                    Set<String> used) {
 
         for (int col = 0; col < width; col++) {
             StringBuilder word = new StringBuilder();
             for (int row = 0; row < height; row++) {
                 word.append(rect[row].charAt(col));
             }
+
+            if (used.contains(word.toString())) return false;
 
             TrieNode node = findPrefix(root, word.toString());
             if (node == null) return false;
@@ -126,21 +136,30 @@ public class WordRectangle {
         return true;
     }
 
-    private boolean buildRow(String[] rect, int width, int height, int currentRow,
-                             Set<String> words, TrieNode columnTrie) {
+    private boolean buildRow(String[] rect, int width, int height, int row,
+                             Set<String> words, Set<String> used, TrieNode colTrie) {
 
         // Rectangle is complete, validate if columns are full words.
-        if (currentRow >= rect.length) {
-            return validateColumns(rect, height, width, columnTrie, true);
+        if (row >= rect.length) {
+            return validateColumns(rect, height, width, colTrie, true, used);
         }
 
         // Try out placing every word in the current row.
         for (String word : words) {
-            rect[currentRow] = word;
-            if (!validateColumns(rect, currentRow + 1, width, columnTrie, false)) continue;
-            if (buildRow(rect, width, height, currentRow + 1, words, columnTrie)) {
+            if (used.contains(word)) continue;
+
+            rect[row] = word;
+            used.add(word);
+
+            if (!validateColumns(rect, row + 1, width, colTrie, false, used)) {
+                used.remove(word);
+                continue;
+            }
+
+            if (buildRow(rect, width, height, row + 1, words, used, colTrie)) {
                 return true;
             }
+            used.remove(word);
         }
         return false;
     }
@@ -153,9 +172,10 @@ public class WordRectangle {
         if (dict.get(width) == null ||
             dict.get(height) == null) return null;
 
-        TrieNode columnTrie = tries.get(height);
+        TrieNode colTrie = tries.get(height);
         String[] result = new String[height];
-        if (buildRow(result, width, height, 0, dict.get(width), columnTrie)) {
+        Set<String> used = new HashSet<>();
+        if (buildRow(result, width, height, 0, dict.get(width), used, colTrie)) {
             return result;
         }
         return null;
