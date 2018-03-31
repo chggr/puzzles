@@ -34,6 +34,17 @@
 // 4) sellSecond: The maximum profit achieved for both transactions, calculated
 //                as the maximum of the previous value and the current price
 //                minus the price the stock was bought.
+//
+// The second implementation generalizes the aforementioned algorithm to
+// calculate the maximum profit that can be achieved in k transactions. Instead
+// of using just four variables, we now define a buy and a sell array of size
+// equal to the number of transactions. The buy array will hold the lowest price
+// we can buy a stock for the given transaction, taking into account any profit
+// made in the previous transaction. The sell array contains the maximum profit
+// achieved in all transaction up to the current one. The runtime complexity of
+// this generalized algorithm is O(k * n), because for each price we need to
+// update both buy and sell arrays. The space complexity is O(k).
+//
 
 int max (int a, int b) {
     return a > b ? a : b;
@@ -64,19 +75,48 @@ int profit(int prices[], int size) {
     return sellSecond;
 }
 
+int profit(int prices[], int size, int txn) {
+
+    int buy[txn];
+    int sell[txn];
+
+    for (int i = 0; i < txn; i++) {
+        buy[i] = INT_MAX;
+        sell[i] = 0;
+    }
+
+    for (int i = 0; i < size; i++) {
+        for (int j = txn - 1; j >= 0; j--) {
+            sell[j] = max(sell[j], prices[i] - buy[j]);
+            buy[j] = min(buy[j], prices[i] - (j > 0 ? sell[j - 1] : 0));
+        }
+    }
+
+    return sell[txn - 1];
+}
+
 bool test_small_array() {
     int prices[] = {100};
-    return 0 == profit(prices, 1);
+    return 0 == profit(prices, 1) &&
+           0 == profit(prices, 1, 1) &&
+           0 == profit(prices, 1, 2);
 }
 
 bool test_profit() {
     int prices[] = {4, 6, 9, 3, 2, 5, 8, 4, 6, 9};
-    return 12 == profit(prices, 10);
+
+    return 12 == profit(prices, 10) &&
+            7 == profit(prices, 10, 1) &&
+           12 == profit(prices, 10, 2) &&
+           16 == profit(prices, 10, 3);
 }
 
 bool test_no_profit() {
     int prices[] = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
-    return 0 == profit(prices, 10);
+    return 0 == profit(prices, 10) &&
+           0 == profit(prices, 10, 1) &&
+           0 == profit(prices, 10, 2) &&
+           0 == profit(prices, 10, 3);
 }
 
 int main() {
