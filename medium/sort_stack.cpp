@@ -7,7 +7,7 @@
 //
 // Solution: In the implementation below, a temporary stack is used to store
 // elements in the reverse order than required (i.e. from largest to smallest).
-// The elements in the temporary stack will be popped and transfered to the
+// The elements in the temporary stack will be popped and transferred to the
 // main stack to obtain the correct order.
 //
 // In every iteration, one element is popped from the main stack and compared
