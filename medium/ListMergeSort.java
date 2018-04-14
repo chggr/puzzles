@@ -123,6 +123,12 @@ public class ListMergeSort {
         return assertList(expected, sort(input));
     }
 
+    private static boolean testDuplicates() {
+        Node input = buildList(5, 2, 8, 6, 2, 5, 7, 9, 5);
+        Node expected = buildList(2, 2, 5, 5, 5, 6, 7, 8, 9);
+        return assertList(expected, sort(input));
+    }
+
     public static void main(String[] args) {
         int counter = 0;
         if (!testNull()) {
@@ -144,6 +150,10 @@ public class ListMergeSort {
         if (!testUnsorted()) {
             counter++;
             System.out.println("List unsorted test failed!");
+        }
+        if (!testDuplicates()) {
+            counter++;
+            System.out.println("List with duplicates test failed!");
         }
         System.out.println(counter + " tests failed.");
     }
