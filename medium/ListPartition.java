@@ -136,7 +136,7 @@ public class ListPartition {
         head.next.next = new Node(3);
         head.next.next.next = new Node(4);
         head.next.next.next.next = new Node(5);
-        
+
         head = partitionStable(head, 3);
         return 1 == head.value &&
                2 == head.next.value &&
@@ -151,7 +151,7 @@ public class ListPartition {
         head.next.next = new Node(3);
         head.next.next.next = new Node(4);
         head.next.next.next.next = new Node(5);
-        
+
         head = partition(head, 3);
         return 3 == head.value &&
                2 == head.next.value &&
@@ -166,7 +166,7 @@ public class ListPartition {
         head.next.next = new Node(1);
         head.next.next.next = new Node(2);
         head.next.next.next.next = new Node(4);
-        
+
         head = partitionStable(head, 3);
         return 1 == head.value &&
                2 == head.next.value &&
@@ -181,7 +181,7 @@ public class ListPartition {
         head.next.next = new Node(1);
         head.next.next.next = new Node(2);
         head.next.next.next.next = new Node(4);
-        
+
         head = partition(head, 3);
         return 2 == head.value &&
                1 == head.next.value &&
