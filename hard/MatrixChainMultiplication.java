@@ -36,6 +36,12 @@
 // has now increased to O(N ^ 2). The runtime complexity can be derived if we
 // consider that we need to populate all positions in the N * N array and for
 // each one we execute a for loop N times to calculate the minimum cost.
+//
+// Finally, the third implementation uses a dynamic programming approach to
+// calculate the results of overlapping sub-problems in a bottom up fashion.
+// A memoization array is defined and populated from the diagonal outwards using
+// the same formula as before. The runtime complexity of this algorithm is again
+// O(N ^ 3) and space complexity is O(N ^ 2).
 
 public class MatrixChainMultiplication {
 
@@ -83,28 +89,53 @@ public class MatrixChainMultiplication {
         return cost_memo(dim, 1, dim.length - 1, memo);
     }
 
+    // Similar to memoization implementation above, but calculates results
+    // to sub-problems iteratively to reduce space requirement.
+    private static int cost_dyn(int[] dim) {
+        if (dim.length <= 2) return 0;
+        int[][] memo = new int[dim.length][dim.length];
+
+        for (int len = 2; len < dim.length; len++) {
+            for (int from = 1; from < dim.length - len + 1; from++) {
+                int to = from + len - 1;
+                memo[from][to] = Integer.MAX_VALUE;
+                for (int i = from; i < to; i++) {
+                    int temp = memo[from][i] +
+                               memo[i + 1][to] +
+                               dim[from - 1] * dim[i] * dim[to];
+                    if (temp < memo[from][to]) memo[from][to] = temp;
+                }
+            }
+        }
+        return memo[1][dim.length - 1];
+    }
+
     private static boolean testOneArray() {
         int[] dim = {1, 2};
         return 0 == cost_rec(dim, 1, 1) &&
-               0 == cost_memo(dim);
+               0 == cost_memo(dim) &&
+               0 == cost_dyn(dim);
     }
 
     private static boolean testTwoArrays() {
         int[] dim = {1, 2, 3};
         return 6 == cost_rec(dim, 1, 2) &&
-               6 == cost_memo(dim);
+               6 == cost_memo(dim) &&
+               6 == cost_dyn(dim);
     }
 
     private static boolean testThreeArrays() {
         int[] dim = {1, 2, 3, 4};
         return 18 == cost_rec(dim, 1, 3) &&
-               18 == cost_memo(dim);
+               18 == cost_memo(dim) &&
+               18 == cost_dyn(dim);
     }
 
     private static boolean testManyArrays() {
         int[] dim = {10, 30, 5, 60};
         return 4500 == cost_rec(dim, 1, 3) &&
-               4500 == cost_memo(dim);
+               4500 == cost_memo(dim) &&
+               4500 == cost_dyn(dim);
     }
 
     public static void main(String[] args) {
