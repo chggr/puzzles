@@ -20,10 +20,10 @@ public class ArrayList<T> {
         }
 
         if (newArray != null) {
-	    for (int i = 0; i < cursor; i++) {
-		newArray[i] = array[i];
-	    }
-	    array = newArray;
+            for (int i = 0; i < cursor; i++) {
+                newArray[i] = array[i];
+            }
+            array = newArray;
         }
     }
 
