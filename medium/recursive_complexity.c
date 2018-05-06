@@ -22,30 +22,30 @@
 //     overall complexity is O(n^2).
 
 int function_a(int n) {
-	return n <= 0 ? 1 : function_a(n - 1) + 1;
+    return n <= 0 ? 1 : function_a(n - 1) + 1;
 }
 
 int function_b(int n) {
-	return n <= 0 ? 1 : function_b(n - 2) + 1;
+    return n <= 0 ? 1 : function_b(n - 2) + 1;
 }
 
 int function_c(int n) {
-	return n <= 0 ? 1 : function_c(n / 3) + 1;
+    return n <= 0 ? 1 : function_c(n / 3) + 1;
 }
 
 int function_d(int n, int o, int p) {
-	if (n <= 0) printf("%d, %d\n", o, p);
-	else {
-		function_d(n - 1, o + 1, p);
-		function_d(n - 1, o, p + 1);
-	}
+    if (n <= 0) printf("%d, %d\n", o, p);
+    else {
+        function_d(n - 1, o + 1, p);
+        function_d(n - 1, o, p + 1);
+    }
 }
 
 int function_e(int n) {
-	for (int i = 0; i < n; i += 2) {
-		printf("%d\n", i);
-	}
-	return n <= 0 ? 1 : function_e(n - 2) + 1;
+    for (int i = 0; i < n; i += 2) {
+        printf("%d\n", i);
+    }
+    return n <= 0 ? 1 : function_e(n - 2) + 1;
 }
 
 int main() { }
