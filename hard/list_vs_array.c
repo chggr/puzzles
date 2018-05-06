@@ -37,7 +37,7 @@
 //
 // Running test with size: 1
 // Adding to list took: 1
-// Adding to array took: 1 
+// Adding to array took: 1
 //
 // Running test with size: 10
 // Adding to list took: 1
@@ -56,8 +56,8 @@
 // Adding to array took: 34925
 
 struct node {
-	int value;
-	struct node *next;
+    int value;
+    struct node *next;
 };
 
 struct node *head = NULL;
@@ -65,113 +65,113 @@ int *array = NULL;
 int array_size = 0;
 
 void add_list(int value) {
-	struct node *new_node = malloc(sizeof *new_node);
-	new_node->value = value;
+    struct node *new_node = malloc(sizeof *new_node);
+    new_node->value = value;
 
-	if (head == NULL) {
-		head = new_node;
-		return;
-	}
+    if (head == NULL) {
+        head = new_node;
+        return;
+    }
 
-	struct node* curr = head;
-	struct node* prev = NULL;
-	while (curr && curr->value < value) {
-		prev = curr;
-		curr = curr->next;
-	}
-	if (!prev) {
-		head = new_node;
-		new_node->next = curr;
-	} else {
-		prev->next = new_node;
-		new_node->next = curr;
-	}
+    struct node* curr = head;
+    struct node* prev = NULL;
+    while (curr && curr->value < value) {
+        prev = curr;
+        curr = curr->next;
+    }
+    if (!prev) {
+        head = new_node;
+        new_node->next = curr;
+    } else {
+        prev->next = new_node;
+        new_node->next = curr;
+    }
 }
 
 void free_list() {
-	struct node* curr = head;
-	struct node* next;
-	head = NULL;
+    struct node* curr = head;
+    struct node* next;
+    head = NULL;
 
-	while (curr) {
-		next = curr->next;
-		free(curr);
-		curr = next;
-	}
+    while (curr) {
+        next = curr->next;
+        free(curr);
+        curr = next;
+    }
 }
 
 void add_array(int value) {
-	int pos;
-	for (pos = 0; pos < array_size; pos++) {
-		if (array[pos] > value) break;
-	}
+    int pos;
+    for (pos = 0; pos < array_size; pos++) {
+        if (array[pos] > value) break;
+    }
 
-	for (int i = array_size; i >= pos; i--) {
-		array[i] = array[i-1];
-	}
-	array[pos] = value;
+    for (int i = array_size; i >= pos; i--) {
+        array[i] = array[i-1];
+    }
+    array[pos] = value;
 }
 
 int assert_correctness() {
-	for (int i = 0; i < array_size - 1; i++) {
-		if (array[i] > array[i + 1]) return 0;
-	}
+    for (int i = 0; i < array_size - 1; i++) {
+        if (array[i] > array[i + 1]) return 0;
+    }
 
-	struct node* current = head;
-	int i = 0;
-	while(current) {
-		if (current->next && current->next->value < current->value)
-			return 0;
-		if (current->value != array[i++])
-			return 0;
-		current = current->next;
-	}
-	return 1;
+    struct node* current = head;
+    int i = 0;
+    while(current) {
+        if (current->next && current->next->value < current->value)
+            return 0;
+        if (current->value != array[i++])
+            return 0;
+        current = current->next;
+    }
+    return 1;
 }
 
 int * create_random(int size) {
-	int *result = malloc(size * sizeof *result);
-	srand(clock());
-	for (int i = 0; i < size; i++) {
-		result[i] = rand();
-	}
-	return result;
+    int *result = malloc(size * sizeof *result);
+    srand(clock());
+    for (int i = 0; i < size; i++) {
+        result[i] = rand();
+    }
+    return result;
 }
 
 void run_test(unsigned int size) {
-	printf("Running test with size: %u\n", size);
+    printf("Running test with size: %u\n", size);
 
-	array = malloc(size * sizeof *array);
-	array_size = 0;
-	int *random = create_random(size);
+    array = malloc(size * sizeof *array);
+    array_size = 0;
+    int *random = create_random(size);
 
-	clock_t start = clock();
-	for (int i = 0; i < size; i++) {
-		add_list(random[i]);
-	}
-	printf("Adding to list took: %ld\n", (clock() - start));
+    clock_t start = clock();
+    for (int i = 0; i < size; i++) {
+        add_list(random[i]);
+    }
+    printf("Adding to list took: %ld\n", (clock() - start));
 
-	start = clock();
-	for (int i = 0; i < size; i++) {
-		add_array(random[i]);
-		++array_size;
-	}
-	printf("Adding to array took: %ld\n\n", (clock() - start));
+    start = clock();
+    for (int i = 0; i < size; i++) {
+        add_array(random[i]);
+        ++array_size;
+    }
+    printf("Adding to array took: %ld\n\n", (clock() - start));
 
-	if (!assert_correctness(head)) {
-		printf("Values are not ordered in list or array!");
-	}
+    if (!assert_correctness(head)) {
+        printf("Values are not ordered in list or array!");
+    }
 
-	free(array);
-	free(random);
-	free_list();
+    free(array);
+    free(random);
+    free_list();
 }
 
 int main() {
-	run_test(1);
-	run_test(10);
-	run_test(100);
-	run_test(1000);
-	run_test(10000);
+    run_test(1);
+    run_test(10);
+    run_test(100);
+    run_test(1000);
+    run_test(10000);
 }
 
