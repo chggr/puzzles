@@ -8,55 +8,57 @@
 // E.g. Strings "silent" and "listen" are anagrams.
 //      Strings "silent" and "test" are not anagrams.
 
-bool isAnagram(std::string a, std::string b) {
-	if (a.length() != b.length()) return false;
-	if (a.length() == 0 && b.length() == 0) return false;
+using namespace std;
 
-	int freq[256];
-	for (int i = 0; i < 256; i++) freq[i] = 0;
-	for (int i = 0; i < a.length(); i++) freq[a.at(i)]++;
-	for (int i = 0; i < b.length(); i++) freq[b.at(i)]--;
+bool isAnagram(string a, string b) {
+    if (a.length() != b.length()) return false;
+    if (a.length() == 0 && b.length() == 0) return false;
 
-	for (int i = 0; i < 256; i++) {
-		if (freq[i] != 0) return false;
-	}
-	return true;
+    int freq[256];
+    for (int i = 0; i < 256; i++) freq[i] = 0;
+    for (int i = 0; i < a.length(); i++) freq[a.at(i)]++;
+    for (int i = 0; i < b.length(); i++) freq[b.at(i)]--;
+
+    for (int i = 0; i < 256; i++) {
+        if (freq[i] != 0) return false;
+    }
+    return true;
 }
 
 bool test_anagram() {
-	return isAnagram("silent", "listen");
+    return isAnagram("silent", "listen");
 }
 
 bool test_non_anagram() {
-	return !isAnagram("silent", "test");
+    return !isAnagram("silent", "test");
 }
 
 bool test_empty_string() {
-	return !isAnagram("", "test");
+    return !isAnagram("", "test");
 }
 
 bool test_empty_strings() {
-	return !isAnagram("", "");
+    return !isAnagram("", "");
 }
 
 int main() {
-	int counter = 0;
-	if (!test_anagram()) {
-		std::cout << "Anagram test failed!\n";
-		counter++;
-	}
-	if (!test_non_anagram()) {
-		std::cout << "Non anagram test failed!\n";
-		counter++;
-	}
-	if (!test_empty_string()) {
-		std::cout << "Empty string test failed!\n";
-		counter++;
-	}
-	if (!test_empty_strings()) {
-		std::cout << "Empty strings test failed!\n";
-		counter++;
-	}
-	std::cout << counter << " tests failed.\n";
+    int counter = 0;
+    if (!test_anagram()) {
+        cout << "Anagram test failed!" << endl;
+        counter++;
+    }
+    if (!test_non_anagram()) {
+        cout << "Non anagram test failed!" << endl;
+        counter++;
+    }
+    if (!test_empty_string()) {
+        cout << "Empty string test failed!" << endl;
+        counter++;
+    }
+    if (!test_empty_strings()) {
+        cout << "Empty strings test failed!" << endl;
+        counter++;
+    }
+    cout << counter << " tests failed." << endl;
 }
 
