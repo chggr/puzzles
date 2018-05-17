@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
 
 // Task description: Given any positive integer, find the next higher integer
 // that uses exactly the same digits. If the given number is negative or zero,
@@ -11,51 +9,58 @@ import java.util.List;
 //      For input -10 the answer is 0
 //      For input 0 the answer is 0
 //      For input 98765 the answer is 98765
+//      For input 120 the answer is 201
 //
 // Solution: The first implementation below uses a simple brute force approach
-// to solve this task. It first extracts the digits of the given number and then
-// iteratively examines all numbers higher than that to identify a match. The
-// runtime complexity of this approach is O(n * 10^n), where n is the number of
-// digits in the given integer. The algorithm potentially examines 10^n
-// candidates and for each one extracts and compares its digits.
+// to solve this task. It first calculates the number of digits in the input
+// integer and their histogram. It then iterates through all numbers that are
+// higher and have the same count of digits to identify one that also has the
+// same histogram. The runtime complexity of this approach is O(N * 10^N), where
+// N is the number of digits of the given integer. The algorithm potentially
+// examines 10^N candidates and for each one extracts and compares its digits.
 
 public class HigherWithSameDigits {
 
-    private static int find(int number) {
-        if (number <= 0) {
-            return 0;
+    private static int[] getDigitHist(int number) {
+        int[] digits = new int[10];
+        while (number > 0) {
+            digits[number % 10]++;
+            number /= 10;
         }
+        return digits;
+    }
 
-        final List<Integer> digits = getDigits(number);
-        for (int i = number + 1; ; i++) {
-            final List<Integer> iDigits = getDigits(i);
-            if (iDigits.size() != digits.size()) {
-                break;
-            }
-            if (listEquals(digits, iDigits)) {
-                return i;
-            }
+    private static int getDigitCount(int number) {
+        int count = 0;
+        while (number > 0) {
+            count++;
+            number /= 10;
+        }
+        return count;
+    }
+
+    private static int find(int number) {
+        if (number <= 0) return 0;
+
+        int[] hist = getDigitHist(number);
+        int count = getDigitCount(number);
+
+        for (int i = number + 1; i < Math.pow(10, count + 1); i++) {
+            if (Arrays.equals(hist, getDigitHist(i))) return i;
         }
         return number;
     }
 
-    private static List<Integer> getDigits(int number) {
-        final List<Integer> digits = new ArrayList<>();
-        while(number >= 10) {
-            digits.add(number % 10);
-            number /= 10;
-        }
-        digits.add(number);
-        return digits;
+    private static boolean testGetDigitHist() {
+        int[] expected = {1, 1, 1, 0, 1, 2, 0, 0, 1, 1};
+        return Arrays.equals(expected, getDigitHist(25051984));
     }
 
-    private static boolean listEquals(List<Integer> a, List<Integer> b) {
-        if (a.size() != b.size()) {
-            return false;
-        }
-        Collections.sort(a);
-        Collections.sort(b);
-        return a.equals(b);
+    private static boolean testGetDigitCount() {
+        return 0 == getDigitCount(0) &&
+               1 == getDigitCount(4) &&
+               3 == getDigitCount(528) &&
+               8 == getDigitCount(25051984);
     }
 
     private static boolean testZero() {
@@ -84,6 +89,14 @@ public class HigherWithSameDigits {
 
     public static void main(String[] args) {
         int counter = 0;
+        if (!testGetDigitHist()) {
+            System.out.println("Get digit hist test failed!");
+            counter++;
+        }
+        if (!testGetDigitCount()) {
+            System.out.println("Get digit count test failed!");
+            counter++;
+        }
         if (!testZero()) {
             System.out.println("Zero test failed!");
             counter++;
