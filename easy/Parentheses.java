@@ -17,7 +17,10 @@ import java.util.Set;
 // does not generate duplicate results and thus is more efficient. It builds
 // the string from scratch, adding a left parenthesis and a right parenthesis
 // at each step, making sure to eliminate any invalid results by counting how
-// many left and right parentheses are remaining.
+// many left and right parentheses are remaining. The total number of valid
+// combinations of n pairs of parentheses is a Catalan number calculated as
+// follows C(n) = (2 * n)! / ((n + 1)! * n!). Thus for n equal to 3 the
+// expression evaluates to 6! / (4! * 3!) = 720 / (24 * 6) = 5
 
 public class Parentheses {
 
