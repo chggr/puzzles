@@ -18,12 +18,6 @@ import java.util.List;
 // runtime complexity of this approach is O(n * 10^n), where n is the number of
 // digits in the given integer. The algorithm potentially examines 10^n
 // candidates and for each one extracts and compares its digits.
-//
-// The second implementation is based on the observation that the higher integer
-// with the same digits can be found if we iterate through each digit of the
-// given number from right to left and we swap it with the next one if that is
-// less than the current. The runtime complexity of this approach is just O(n)
-// and the space complexity is O(1).
 
 public class HigherWithSameDigits {
 
@@ -64,55 +58,28 @@ public class HigherWithSameDigits {
         return a.equals(b);
     }
 
-    private static int find2(int number) {
-        if (number <= 0) {
-            return 0;
-        }
-
-        int temp = number;
-        int position = 0;
-        int current = 0;
-        int next = 0;
-        while(temp > 10) {
-            current = temp % 10;
-            next = (temp / 10) % 10;
-            if (current > next) break;
-            temp /= 10;
-            position++;
-        }
-
-        // Swap current digit with next only if greater.
-        if (current > next) {
-            number -= current * Math.pow(10, position);
-            number -= next * Math.pow(10, position + 1);
-            number += current * Math.pow(10, position + 1);
-            number += next * Math.pow(10, position);
-        }
-        return number;
-    }
-
     private static boolean testZero() {
-        return 0 == find(0) && 0 == find2(0);
+        return 0 == find(0);
     }
 
     private static boolean testNegative() {
-        return 0 == find (-10) && 0 == find2(-10);
+        return 0 == find (-10);
     }
 
     private static boolean testOneDigit() {
-        return 8 == find(8) && 8 == find2(8);
+        return 8 == find(8);
     }
 
     private static boolean testHigherExists() {
-        return 1243 == find(1234) && 1243 == find2(1234);
+        return 1243 == find(1234);
     }
 
     private static boolean testHigherNotExists() {
-        return 98765 == find(98765) && 98765 == find2(98765);
+        return 98765 == find(98765);
     }
 
     private static boolean testDoubleDigits() {
-        return 6995 == find(6959) && 6995 == find2(6959);
+        return 6995 == find(6959);
     }
 
     public static void main(String[] args) {
