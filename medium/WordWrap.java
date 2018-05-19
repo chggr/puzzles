@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 // Task description: Given an integer array that contains the lengths of words
 // in a document and the maximum line length, write a method to arrange the
 // words such that the lines are presented neatly on screen. The method should
@@ -25,6 +27,12 @@
 // where W is the average number of words that fit in each line and N is the
 // total number of words in the input. The space complexity is O(N) required
 // for the recursive stack.
+//
+// The second implementation is exactly the same as the first one but uses
+// memoization to store intermediate results and speed up execution. We use a
+// memo array to store and reuse intermediate results and avoid recomputation.
+// The runtime complexity of this approach is O(W * N) and space complexity
+// remains at O(N).
 
 public class WordWrap {
 
@@ -55,16 +63,45 @@ public class WordWrap {
         return minCost;
     }
 
+    private static int cost_memo(int[] wordLengths, int index,
+                                 int lineLength, int[] memo) {
+
+        if (index >= wordLengths.length) return 0;
+        if (memo[index] != -1) return memo[index];
+
+        int minCost = Integer.MAX_VALUE;
+        int remLength = lineLength;
+        for (int i = 0; i < wordLengths.length; i++) {
+            remLength -= (index == i) ? 0 : 1;
+            remLength -= wordLengths[i];
+            if (remLength < 0) break;
+
+            int cost = cube(remLength) + cost_rec(wordLengths, i + 1, lineLength);
+            if (cost < minCost) minCost = cost;
+        }
+        memo[index] = minCost;
+        return minCost;
+    }
+
+    private static int cost_memo(int[] wordLengths, int lineLength) {
+        int[] memo = new int[wordLengths.length];
+        Arrays.fill(memo, -1);
+        return cost_memo(wordLengths, 0, lineLength, memo);
+    }
+
     private static boolean testOneLine() {
-        return cube(3) == cost_rec(new int[] {3, 5, 2, 4}, 0, 20);
+        return cube(3) == cost_rec(new int[] {3, 5, 2, 4}, 0, 20) &&
+               cube(3) == cost_memo(new int[] {3, 5, 2, 4}, 20);
     }
 
     private static boolean testTwoLines() {
-        return cube(2) + 1 == cost_rec(new int[] {7, 10, 5, 4, 8}, 0, 20);
+        return cube(2) + 1 == cost_rec(new int[] {7, 10, 5, 4, 8}, 0, 20) &&
+               cube(2) + 1 == cost_memo(new int[] {7, 10, 5, 4, 8}, 20);
     }
 
     private static boolean testMultiLines() {
-        return cube(3) + 1 + 1 == cost_rec(new int[] {3, 2, 2, 5}, 0, 6);
+        return cube(3) + 1 + 1 == cost_rec(new int[] {3, 2, 2, 5}, 0, 6) &&
+               cube(3) + 1 + 1 == cost_memo(new int[] {3, 2, 2, 5}, 6);
     }
 
     public static void main(String[] args) {
